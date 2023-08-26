@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.text.format.Time
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationCompat
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.herpestes.notifications.ui.theme.NotificationsTheme
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +60,11 @@ fun Sayfa() {
             Text(text = "Bildirim oluştur")
         }
         Button(onClick = {
-            
+            val istek = OneTimeWorkRequestBuilder<MyWorker>()
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .build()
+
+            WorkManager.getInstance(context).enqueue(istek)
         }) {
             Text(text = "Yap")
         }
